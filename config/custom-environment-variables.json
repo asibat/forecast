@@ -1,0 +1,6 @@
+{
+  "listenPort": "LISTEN_PORT",
+  "xrapidApiWeatherUrl": "X_RAPID_API_WEATHER_URL",
+  "xrapidApiKey": "X_RAPID_API_KEY",
+  "xrapidApiHost": "X_RAPID_API_HOST"
+}

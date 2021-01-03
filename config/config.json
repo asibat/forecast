@@ -1,0 +1,21 @@
+{
+  "development": {
+    "app": {
+      "port": 8000
+    }
+  },
+  "test": {
+    "app": {
+      "port": 8080
+    }
+  },
+  "production": {
+    "app": {
+      "port": 8081
+    }
+  },
+  "xrapidApi": {
+    "xrapidApiWeatherUrl": "https://community-open-weather-map.p.rapidapi.com/weather",
+    "temperatureUnits": "metric"
+  }
+}

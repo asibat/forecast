@@ -1,0 +1,34 @@
+.App {
+  text-align: center;
+  padding: 30px 30px;
+}
+
+.weather-container {
+  width: 320px;
+  height: 300px;
+  position: fixed;
+  top: 90px;
+  left: 35%;
+  margin-top: -50px;
+  box-shadow: 0 2rem 4rem var(--shadow);
+}
+
+.file-upload-container {
+  padding: 10px;
+  display: table;
+}
+
+.spinner-container {
+  margin: 50px 50px;
+}
+
+.time-container {
+  padding: 25px;
+}
+.danger {
+  color: red;
+}
+
+.success {
+  color: green;
+}
