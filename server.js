@@ -5,6 +5,8 @@ const config = require('./config/config.json')
 const router = require('./routes')
 
 const { OpenWeatherService } = require('./services/OpenWeatherService')
+const { CsvService } = require('./services/CsvService')
+
 const { DB } = require('./DB')
 
 const app = new Koa()
@@ -20,7 +22,7 @@ const openWeatherService = new OpenWeatherService({
     temperatureUnits: xrapidApiConfig.temperatureUnits,
     db
 })
-
+const csvService = new CsvService({})
 // A universal interceptor that prints the ctx each time a request is made on the server
 if (process.env.NODE_ENV !== 'production') {
     app.use(async (ctx, next) => {
@@ -38,8 +40,9 @@ app.use(async function (ctx, next) {
     }
 })
 
-app.context.openWeatherService = openWeatherService
 app.context.db = db
+app.context.openWeatherService = openWeatherService
+app.context.csvService = csvService
 
 app.use(koaBody({multipart: true}))
 app.use(cors())

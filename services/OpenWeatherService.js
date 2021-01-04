@@ -1,6 +1,5 @@
 const rp = require('request-promise')
 const config = require('../config/config.json')
-const { transformCondition} = require('../helpers')
 
 const xrapidApiConfig = config.xrapidApi
 
@@ -41,30 +40,21 @@ class OpenWeatherService {
         return response
     }
     async updateData(weatherData) {
-        const citiesData = Object.entries(weatherData).map(cityData => {
-            const temp = {}
-            const {operator, temperature} = cityData[1].condition
-            temp[cityData[0]] = `${operator}${temperature}`
-            return temp
-        })
-
-        for(const cityData of citiesData) {
-            let condition = transformCondition(Object.values(cityData)[0])
-            const cityName = Object.keys(cityData)[0]
-
+        for(const cityData of weatherData) {
+            const {cityName, condition} = cityData
             const updatedTemp = await this.getCityCurrentTemperature(cityName)
-            const shouldAlert = this.checkCityCondition(cityName, updatedTemp, condition)
+            const newAlertStatus = this.checkCityCondition(cityName, updatedTemp, condition)
+            const currentAlertStatus = await this.db.getCurrentCityAlertStatusByCityName(cityName)
+            const shouldAlert = !currentAlertStatus && newAlertStatus
 
             const cityWeatherInfo = {
                 currentTemperature: updatedTemp,
                 condition,
-                status: shouldAlert,
+                status: newAlertStatus,
                 lastTriggered: shouldAlert ? Date.now() : null
             }
-            await this.db.upsert(cityName, cityWeatherInfo)
+            await this.db.upsert(cityData.cityName, cityWeatherInfo)
         }
-
-
         return await this.db.getAllCities()
     }
 

@@ -9,9 +9,8 @@ import {UploadFileComponent} from "./Components/UploadFile";
 const renderTableData = (weatherStore) => {
     if (!weatherStore.getSelectedFile) return
 
-    return Object.entries(weatherStore.getSelectedFile).map(cityData => {
-        const cityName = cityData[0]
-        const {currentTemperature, condition, lastTriggered, status} = cityData[1]
+    return weatherStore.getSelectedFile.map(cityData => {
+        const {cityName, currentTemperature, condition, lastTriggered, status} = cityData
         return (
             <tr key={cityName}>
                 <td>{cityName}</td>
