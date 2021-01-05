@@ -22,7 +22,7 @@ const openWeatherService = new OpenWeatherService({
     temperatureUnits: xrapidApiConfig.temperatureUnits,
     db
 })
-const csvService = new CsvService({})
+const csvService = new CsvService({ db, openWeatherService })
 // A universal interceptor that prints the ctx each time a request is made on the server
 if (process.env.NODE_ENV !== 'production') {
     app.use(async (ctx, next) => {
