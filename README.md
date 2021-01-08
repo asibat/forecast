@@ -1,20 +1,24 @@
-# forecast
+# Forecast
+## extreme temperature changes alert platform
 
 This project was developed with Node.js, Koa2, React using rapidApi weather forecast.
-Add your rapidApid host and key using ENV VARIABLE:
+
+#### ENV VARIABLE
+Add your rapidApid host and key using:
 
 - X_RAPID_API_KEY
 - X_RAPID_API_HOST
 
 
 The application recieves a csv file containing a list of cities and temperature conditions
-  
+
 | City  | Condition |
 | ------------- | :-------------: |
 | Madrid, ES  | >1 |
 | Rome, IT  | =15 |
 | Santiago de Cali, CO | <2 |
- 
+
+
 The app gives you the ability to upload a file OR use the api to process and parse the file.
 
 The app will activate an alert status if the current temperature of the city fulfils or violates the condition, the UI will render this table of results:
