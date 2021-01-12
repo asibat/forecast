@@ -3,6 +3,7 @@ const parseCSV = require('csv-parse/lib/sync')
 const { isEmpty } = require('lodash')
 
 const { transformCondition} = require('../helpers')
+const { csvHeaderInterface, csvParseOptions } = require('../constants')
 
 class CsvService {
     constructor(opts) {
@@ -27,25 +28,24 @@ class CsvService {
             await this.db.create(cityName, cityWeatherInfo)
         }
     }
-    transformCsvData(csvData) {
+    transformConditionToObject(csvData) {
         let transformedData = {}
+        const { City, Condition} = csvHeaderInterface
 
         if (isEmpty(csvData)) return
-        csvData.slice(1).forEach(row => {
-            transformedData[row[0]] = transformCondition(row[1])
+
+        csvData.forEach(row => {
+            transformedData[row[City]] = transformCondition(row[Condition])
         })
 
         return transformedData
     }
+
     async getDataFromCSVFile(filePath) {
         let content = await fs.readFile(filePath, 'utf8')
         content = this.removeBOM(content)
 
-        const parseOptions = {
-            skip_empty_lines: true,
-            skip_lines_with_empty_values: true
-        }
-        return parseCSV(content, parseOptions)
+        return parseCSV(content, csvParseOptions)
     }
 
     removeBOM(str) {

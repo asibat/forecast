@@ -1,5 +1,6 @@
 const { isEmpty, get } = require('lodash')
 const { BAD_REQUEST } = require('http-status')
+const { csvHeaderInterface } = require('../constants')
 
 async function process(ctx) {
     if (!validateCsvParams(ctx)) return
@@ -8,8 +9,9 @@ async function process(ctx) {
     try {
         const csvData = await ctx.csvService.getDataFromCSVFile(file.path)
 
-        if (!validateCsvContent(ctx, csvData)) return
-        const transformedData = ctx.csvService.transformCsvData(csvData)
+        if (!validateCsvHeader(ctx, csvData)) return
+        const csvRemovedHeader = csvData.slice(1)
+        const transformedData = ctx.csvService.transformConditionToObject(csvRemovedHeader)
 
         await ctx.csvService.bulkSave(transformedData)
     } catch (err) {
@@ -19,14 +21,16 @@ async function process(ctx) {
     ctx.body = await ctx.db.getAllCities()
 }
 
-function validateCsvContent(ctx, csvData) {
+function validateCsvHeader(ctx, csvData) {
     const csvHeaders = csvData[0]
-    const validHeader = csvHeaders[0].trim() === 'City' && csvHeaders[1].trim() === 'Condition'
 
-    if (!(Array.isArray(csvHeaders) && validHeader)) {
-        badRequest(ctx, 'Wrong or missing csv file headers row.')
-        return false
+    for( const [key,val] of Object.entries(csvHeaderInterface)) {
+        if(csvHeaders[val] !== key) {
+            badRequest(ctx, 'Wrong or missing csv file headers row.')
+            return false
+        }
     }
+
     return true
 }
 
